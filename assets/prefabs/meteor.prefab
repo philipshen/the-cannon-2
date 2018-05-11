@@ -10,7 +10,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "bullet",
+    "_name": "meteor",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -44,8 +44,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 5,
-      "height": 22
+      "width": 27,
+      "height": 27
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -72,7 +72,7 @@
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__uuid__": "03de7ad5-c838-48c5-a7ac-3d2c24c4453c"
+      "__uuid__": "ba2db393-6b03-42fd-8672-d6c74e53c729"
     },
     "_type": 0,
     "_sizeMode": 1,
@@ -98,8 +98,8 @@
     },
     "_enabled": true,
     "_type": 2,
-    "_allowSleep": false,
-    "_gravityScale": 0,
+    "_allowSleep": true,
+    "_gravityScale": 1,
     "_linearDamping": 0,
     "_angularDamping": 0,
     "_linearVelocity": {
@@ -110,7 +110,7 @@
     "_angularVelocity": 0,
     "_fixedRotation": false,
     "enabledContactListener": false,
-    "bullet": true
+    "bullet": false
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -118,9 +118,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "b9ec2fa2-0650-4636-9a41-8466ee4bb4ef"
+      "__uuid__": "bb5ff61a-ea72-4c80-a858-19c4ff6d8908"
     },
-    "fileId": "2fI6y/E+lOjZMk3Ym7c37y",
+    "fileId": "a0rqYI8P9OSryNmz/Q3zmw",
     "sync": false
   }
 ]

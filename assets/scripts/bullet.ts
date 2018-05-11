@@ -10,34 +10,20 @@
 
 const {ccclass, property} = cc._decorator;
 
-const { PI, acos, sqrt } = Math
-const deg = rad => rad * (180/PI)
-
 @ccclass
 export default class NewClass extends cc.Component {
 
-    body: cc.RigidBody
     timeToLive: number = 10000
     lifeTime: number = 0 
 
     // LIFE-CYCLE CALLBACKS:
     update(dt) {
-        if (!cc.isValid(this.node) || !this.body) return
-
-        const { linearVelocity: { x, y } } = this.body;
+        if (!cc.isValid(this.node)) return
         
         this.lifeTime += dt * 1000;
-
-        this.node.rotation = deg(acos(y / (sqrt(x*x + y*y))))
-
         if (this.lifeTime >= this.timeToLive) {
             this.node.destroy()
         }
-    }
-
-    // Control
-    setBody(body) {
-        this.body = body
     }
 
 }

@@ -19,43 +19,69 @@ const sind = deg => sin(rad(deg));
 @ccclass
 export default class NewClass extends cc.Component {
 
-    @property
-    gravity: number = 0;
+    @property gravity: number = 0;
     
     @property(cc.Prefab)
-    bullet: cc.Prefab = null;
+    bullet: cc.Prefab = null
+
+    @property(cc.Prefab)
+    meteor: cc.Prefab = null
+
+    @property meteorSpawnMinX = 0 // In medium article, note that the "= 0" is necessary for it to be editable in Cocos Creator
+    @property meteorSpawnMaxX = 0
+    @property meteorSpawnMinY = 0
+    @property meteorSpawnMaxY = 0
+    @property meteorMinVelocity = 0
+    @property meteorMaxVelocity = 0
 
     @property(cc.RigidBody)
-    floor: cc.RigidBody = null;
+    floor: cc.RigidBody = null
 
     // LIFE-CYCLE CALLBACKS
     onLoad() {
         // Create physics space
         let physicsManager = cc.director.getPhysicsManager()
-        physicsManager.enabled = true;
-        physicsManager.gravity = cc.v2(0, this.gravity);
+        physicsManager.enabled = true
+        physicsManager.gravity = cc.v2(0, this.gravity)
 
+        this.createMeteor()
     }
 
-    start() {
-        this.createBullet(0, 0, 200, 90)
-    }
-
-    // UTILITIES
-    private createBullet(x, y, velocity, angle) {
+    createBullet(position: cc.Vec2, velocity: number, angle: number) {
         const newBullet = cc.instantiate(this.bullet)
-        const pos = cc.v2(x, y)
-        newBullet.setPosition(pos)
+        newBullet.setPosition(position) 
         newBullet.rotation = angle
+        newBullet.zIndex = -1
 
         // Physics, rigid body
-        const body = newBullet.addComponent(cc.RigidBody)
-        body.linearVelocity = cc.v2(sind(angle + 90) * velocity, cosd(angle + 90) * velocity)
+        // const body = newBullet.addComponent(cc.RigidBody)
+        const body = newBullet.getComponent(cc.RigidBody)
+        body.linearVelocity = cc.v2(sind(angle) * velocity, cosd(angle) * velocity)
         body.type = cc.RigidBodyType.Kinematic
 
-        newBullet.addComponent('bullet').setBody(body)
-    
+        newBullet.addComponent('bullet')
+        
         this.node.addChild(newBullet)
+    }
+
+    createMeteor() {
+        const x = this.randInRange(this.meteorSpawnMinX, this.meteorSpawnMaxX)
+        const y = this.randInRange(this.meteorSpawnMinY, this.meteorSpawnMaxY)
+        const angle = 115 + Math.random() * 20
+        const velocity = this.randInRange(this.meteorMinVelocity, this.meteorMaxVelocity)
+
+        const node = cc.instantiate(this.meteor)
+        node.setPosition(cc.v2(x, y))
+
+        const body = node.getComponent(cc.RigidBody)
+        body.linearVelocity = cc.v2(sind(angle) * velocity, cosd(angle) * velocity)
+        
+        this.node.addChild(node)
+    }
+    
+    // Utilities
+    randInRange(min: number, max: number): number {
+        return Math.random() * (max - min) + min;
     }
 
 }

@@ -11,6 +11,10 @@
 const {ccclass, property} = cc._decorator;
 
 // Utility
+const { cos, sin, PI } = Math;
+const rad = deg => deg * PI / 180;
+const cosd = deg => cos(rad(deg));
+const sind = deg => sin(rad(deg));
 const clamp = (val, min, max) => val < min ? min : val > max ? max : val;
 
 @ccclass
@@ -57,6 +61,20 @@ export default class NewClass extends cc.Component {
                     case cc.KEY.d:
                         cannon.angleSpeed = cannon.baseAngleSpeed;
                         break;
+                    case cc.KEY.space:
+                        // Get the position of the end of the barrel
+                        const barrelPosition = cannon.barrel.getPosition()
+                        const angle = cannon.barrel.rotation
+                        const barrelLength = cannon.barrel.height
+                        barrelPosition.x += barrelLength * sind(angle)
+                        barrelPosition.y += barrelLength * cosd(angle)
+
+                        const game = cc.find('/game').getComponent('game')
+                        // Convert the position to world space of the cannon, then node space of the game canvas
+                        const barrelTipWorld = cannon.node.convertToWorldSpaceAR(barrelPosition)
+                        const bulletPosition = game.node.convertToNodeSpaceAR(barrelTipWorld)
+
+                        game.createBullet(bulletPosition, 400, angle)
                 }
             },
             onKeyReleased(kCode, e) {
