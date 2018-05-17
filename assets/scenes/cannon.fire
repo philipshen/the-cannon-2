@@ -590,12 +590,12 @@
     "meteor": {
       "__uuid__": "bb5ff61a-ea72-4c80-a858-19c4ff6d8908"
     },
-    "meteorSpawnMinX": 0,
-    "meteorSpawnMaxX": 0,
-    "meteorSpawnMinY": 0,
-    "meteorSpawnMaxY": 0,
-    "meteorMinVelocity": 0,
-    "meteorMaxVelocity": 0,
+    "meteorSpawnMinX": -50,
+    "meteorSpawnMaxX": 50,
+    "meteorSpawnMinY": -50,
+    "meteorSpawnMaxY": 50,
+    "meteorMinVelocity": 10,
+    "meteorMaxVelocity": 100,
     "floor": {
       "__id__": 5
     }

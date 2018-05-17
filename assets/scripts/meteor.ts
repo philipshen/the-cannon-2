@@ -13,25 +13,17 @@ const {ccclass, property} = cc._decorator;
 @ccclass
 export default class NewClass extends cc.Component {
 
-    timeToLive: number = 5000
-    lifeTime: number = 0 
+    timeToLive = 10000
+    lifeTime = 0
 
-    // LIFE-CYCLE CALLBACKS:
-    update(dt) {
+    // LIFE-CYCLE CALLBACKS
+    update (dt) {
         if (!cc.isValid(this.node)) return
-        
-        this.lifeTime += dt * 1000;
+
+        this.lifeTime += dt * 1000
         if (this.lifeTime >= this.timeToLive) {
             this.node.destroy()
         }
     }
-
-    // Collider callbacks
-    onBeginContact(contact, selfCollider, otherCollider) {
-        if (otherCollider.node.name === "meteor") {
-            selfCollider.node.destroy()
-            otherCollider.node.destroy()
-        }
-    }
-
+    
 }

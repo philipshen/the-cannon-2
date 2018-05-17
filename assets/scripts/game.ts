@@ -37,16 +37,24 @@ export default class NewClass extends cc.Component {
     @property(cc.RigidBody)
     floor: cc.RigidBody = null
 
-    // LIFE-CYCLE CALLBACKS
+    // MARK: - Lifecycle
     onLoad() {
         // Create physics space
         let physicsManager = cc.director.getPhysicsManager()
         physicsManager.enabled = true
         physicsManager.gravity = cc.v2(0, this.gravity)
-
-        this.createMeteor()
     }
 
+    start() {
+        this.scheduleCreateMeteor()
+    }
+
+    // MARK: - Collision callbacks
+    onCollisionEnter(other, self) {
+        console.log("Collision callback in the game?")
+    }
+
+    // MARK: - Factory
     createBullet(position: cc.Vec2, velocity: number, angle: number) {
         const newBullet = cc.instantiate(this.bullet)
         newBullet.setPosition(position) 
@@ -58,8 +66,6 @@ export default class NewClass extends cc.Component {
         const body = newBullet.getComponent(cc.RigidBody)
         body.linearVelocity = cc.v2(sind(angle) * velocity, cosd(angle) * velocity)
         body.type = cc.RigidBodyType.Kinematic
-
-        newBullet.addComponent('bullet')
         
         this.node.addChild(newBullet)
     }
@@ -67,7 +73,7 @@ export default class NewClass extends cc.Component {
     createMeteor() {
         const x = this.randInRange(this.meteorSpawnMinX, this.meteorSpawnMaxX)
         const y = this.randInRange(this.meteorSpawnMinY, this.meteorSpawnMaxY)
-        const angle = 115 + Math.random() * 20
+        const angle = Math.random() * 360
         const velocity = this.randInRange(this.meteorMinVelocity, this.meteorMaxVelocity)
 
         const node = cc.instantiate(this.meteor)
@@ -79,7 +85,16 @@ export default class NewClass extends cc.Component {
         this.node.addChild(node)
     }
     
-    // Utilities
+    // MARK: - Utilities
+    scheduleCreateMeteor() {
+        cc.director.getScheduler().schedule(this.createMeteor, this, 1 + Math.random() * 1, false);
+    }
+
+    createMeteorAndScheduleNext() {
+        this.createMeteor()
+        this.scheduleCreateMeteor()
+    }
+
     randInRange(min: number, max: number): number {
         return Math.random() * (max - min) + min;
     }
