@@ -10,13 +10,21 @@
 
 const {ccclass, property} = cc._decorator;
 
+import Game from './game'
+
 @ccclass
-export default class NewClass extends cc.Component {
+export default class Bullet extends cc.Component {
+
+    game: Game
 
     timeToLive: number = 5000
     lifeTime: number = 0 
 
     // LIFE-CYCLE CALLBACKS:
+    onLoad() {
+        this.game = cc.find('/game').getComponent('game')
+    }
+
     update(dt) {
         if (!cc.isValid(this.node)) return
         
@@ -31,6 +39,8 @@ export default class NewClass extends cc.Component {
         if (otherCollider.node.name === "meteor") {
             selfCollider.node.destroy()
             otherCollider.node.destroy()
+
+            this.game.createExplosion(otherCollider.node.position)
         }
     }
 

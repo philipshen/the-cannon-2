@@ -11,7 +11,7 @@
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class Meteor extends cc.Component {
 
     timeToLive = 10000
     lifeTime = 0

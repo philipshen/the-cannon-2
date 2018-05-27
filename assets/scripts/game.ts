@@ -17,7 +17,7 @@ const cosd = deg => cos(rad(deg));
 const sind = deg => sin(rad(deg));
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class Game extends cc.Component {
 
     @property gravity: number = 0;
     
@@ -26,6 +26,9 @@ export default class NewClass extends cc.Component {
 
     @property(cc.Prefab)
     meteor: cc.Prefab = null
+
+    @property(cc.Prefab)
+    explosion: cc.Prefab = null
 
     @property meteorSpawnMinX = 0 // In medium article, note that the "= 0" is necessary for it to be editable in Cocos Creator
     @property meteorSpawnMaxX = 0
@@ -49,17 +52,11 @@ export default class NewClass extends cc.Component {
         this.scheduleCreateMeteor()
     }
 
-    // MARK: - Collision callbacks
-    onCollisionEnter(other, self) {
-        console.log("Collision callback in the game?")
-    }
-
     // MARK: - Factory
     createBullet(position: cc.Vec2, velocity: number, angle: number) {
         const newBullet = cc.instantiate(this.bullet)
         newBullet.setPosition(position) 
         newBullet.rotation = angle
-        newBullet.zIndex = -1
 
         // Physics, rigid body
         // const body = newBullet.addComponent(cc.RigidBody)
@@ -81,6 +78,13 @@ export default class NewClass extends cc.Component {
 
         const body = node.getComponent(cc.RigidBody)
         body.linearVelocity = cc.v2(sind(angle) * velocity, cosd(angle) * velocity)
+        
+        this.node.addChild(node)
+    }
+
+    createExplosion(position: cc.Vec2) {
+        const node = cc.instantiate(this.explosion)
+        node.setPosition(position)
         
         this.node.addChild(node)
     }

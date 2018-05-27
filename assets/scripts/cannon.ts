@@ -10,6 +10,8 @@
 
 const {ccclass, property} = cc._decorator;
 
+import Game from './game'
+
 // Utility
 const { cos, sin, PI } = Math;
 const rad = deg => deg * PI / 180;
@@ -18,13 +20,15 @@ const sind = deg => sin(rad(deg));
 const clamp = (val, min, max) => val < min ? min : val > max ? max : val;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class Cannon extends cc.Component {
 
     @property(cc.Node)
     barrel: cc.Node = null;
 
     @property (cc.Node)
     tank: cc.Node = null;
+
+    game: Game
 
     // Barrel
     @property angle: number = 0;
@@ -36,6 +40,10 @@ export default class NewClass extends cc.Component {
     // LIFE-CYCLE CALLBACKS:
     onLoad() {
         // Set up event listeners and stuff
+        this.game = cc.find('/game').getComponent('game')
+
+        console.log(this.game)
+
         this.initKeyboardHook();
     }
 
@@ -69,12 +77,11 @@ export default class NewClass extends cc.Component {
                         barrelPosition.x += barrelLength * sind(angle)
                         barrelPosition.y += barrelLength * cosd(angle)
 
-                        const game = cc.find('/game').getComponent('game')
                         // Convert the position to world space of the cannon, then node space of the game canvas
                         const barrelTipWorld = cannon.node.convertToWorldSpaceAR(barrelPosition)
-                        const bulletPosition = game.node.convertToNodeSpaceAR(barrelTipWorld)
+                        const bulletPosition = cannon.game.node.convertToNodeSpaceAR(barrelTipWorld)
 
-                        game.createBullet(bulletPosition, 400, angle)
+                        cannon.game.createBullet(bulletPosition, 400, angle)
                 }
             },
             onKeyReleased(kCode, e) {
