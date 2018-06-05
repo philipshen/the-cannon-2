@@ -20,7 +20,7 @@ const sind = deg => sin(rad(deg));
 export default class Game extends cc.Component {
 
     @property gravity: number = 0;
-    
+
     @property(cc.Prefab)
     bullet: cc.Prefab = null
 
@@ -29,6 +29,9 @@ export default class Game extends cc.Component {
 
     @property(cc.Prefab)
     explosion: cc.Prefab = null
+
+    @property(cc.AudioClip)
+    explosionSound: cc.AudioClip = null
 
     @property meteorSpawnMinX = 0 // In medium article, note that the "= 0" is necessary for it to be editable in Cocos Creator
     @property meteorSpawnMaxX = 0
@@ -74,6 +77,7 @@ export default class Game extends cc.Component {
         const velocity = this.randInRange(this.meteorMinVelocity, this.meteorMaxVelocity)
 
         const node = cc.instantiate(this.meteor)
+
         node.setPosition(cc.v2(x, y))
 
         const body = node.getComponent(cc.RigidBody)
@@ -87,6 +91,8 @@ export default class Game extends cc.Component {
         node.setPosition(position)
         
         this.node.addChild(node)
+
+        cc.audioEngine.playEffect(this.explosionSound, false)
     }
     
     // MARK: - Utilities

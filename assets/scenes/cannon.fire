@@ -73,9 +73,6 @@
       },
       {
         "__id__": 19
-      },
-      {
-        "__id__": 20
       }
     ],
     "_prefab": null,
@@ -590,7 +587,7 @@
       "__id__": 12
     },
     "angle": 0,
-    "baseAngleSpeed": 20,
+    "baseAngleSpeed": 30,
     "angleSpeed": 0,
     "leftMaxAngle": 90,
     "rightMaxAngle": 90
@@ -672,10 +669,13 @@
       "__uuid__": "b9ec2fa2-0650-4636-9a41-8466ee4bb4ef"
     },
     "meteor": {
-      "__uuid__": "bb5ff61a-ea72-4c80-a858-19c4ff6d8908"
+      "__uuid__": "06787b8a-592c-4892-8a8b-acba91b14f2c"
     },
     "explosion": {
       "__uuid__": "26acb5e3-5778-420c-b5cc-efbca99bb493"
+    },
+    "explosionSound": {
+      "__uuid__": "ecf2e27c-0c9b-4822-a0b5-2e789455faef"
     },
     "meteorSpawnMinX": -200,
     "meteorSpawnMaxX": 200,
@@ -686,15 +686,5 @@
     "floor": {
       "__id__": 7
     }
-  },
-  {
-    "__type__": "cc.TiledMap",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 2
-    },
-    "_enabled": true,
-    "_tmxFile": null
   }
 ]

@@ -42,8 +42,6 @@ export default class Cannon extends cc.Component {
         // Set up event listeners and stuff
         this.game = cc.find('/game').getComponent('game')
 
-        console.log(this.game)
-
         this.initKeyboardHook();
     }
 
