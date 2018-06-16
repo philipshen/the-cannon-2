@@ -1,0 +1,1 @@
+export const clamp = (val, min, max) => val < min ? min : val > max ? max : val;

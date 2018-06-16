@@ -33,7 +33,7 @@ export default class Game extends cc.Component {
     @property(cc.AudioClip)
     explosionSound: cc.AudioClip = null
 
-    @property meteorSpawnMinX = 0 // In medium article, note that the "= 0" is necessary for it to be editable in Cocos Creator
+    @property meteorSpawnMinX = 0
     @property meteorSpawnMaxX = 0
     @property meteorSpawnMinY = 0
     @property meteorSpawnMaxY = 0
