@@ -341,7 +341,7 @@
     "_angularVelocity": 0,
     "_fixedRotation": false,
     "enabledContactListener": true,
-    "bullet": true
+    "bullet": false
   },
   {
     "__type__": "e4fd43lkPdEGK5vTyWCD/WV",

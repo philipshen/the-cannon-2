@@ -10,55 +10,49 @@
 
 const {ccclass, property} = cc._decorator;
 
+import * as MathUtilities from './Utilities/MathUtilities'
 import Game from './game'
 
-// Utility
-const { cos, sin, PI } = Math;
-const rad = deg => deg * PI / 180;
-const cosd = deg => cos(rad(deg));
-const sind = deg => sin(rad(deg));
-const clamp = (val, min, max) => val < min ? min : val > max ? max : val;
-
 @ccclass
-export default class Cannon extends cc.Component {
+export default class NewClass extends cc.Component {
 
-    @property(cc.Node)
-    barrel: cc.Node = null;
-
+    @property (cc.Node) // 1
+    barrel: cc.Node = null
+    
     @property (cc.Node)
-    tank: cc.Node = null;
+    body: cc.Node = null
+
+    @property angle: number = 0
+    @property baseAngleSpeed: number = 0
+    @property angleSpeed: number = 0
+    @property leftMaxAngle: number = 0
+    @property rightMaxAngle: number = 0
 
     game: Game
 
-    // Barrel
-    @property angle: number = 0;
-    @property baseAngleSpeed: number = 0;
-    @property angleSpeed: number = 0;
-    @property leftMaxAngle: number = 0;
-    @property rightMaxAngle: number = 0;
+    onLoad () { // 1
+        this.hookInput()
 
-    // LIFE-CYCLE CALLBACKS:
-    onLoad() {
-        this.initKeyboardHook();
-
-        this.game = cc.find('/game').getComponent('game')
+        this.game = cc.find('/Game').getComponent('Game')
     }
 
     update(dt) {
         const { angleSpeed } = this;
 
         if (angleSpeed !== 0) {
-            const angle = this.angle = clamp(this.angle + angleSpeed * dt, -1 * this.leftMaxAngle, this.rightMaxAngle);
+            const angle = this.angle = MathUtilities.clamp(this.angle + angleSpeed * dt, 
+                                                           this.leftMaxAngle * -1, 
+                                                           this.rightMaxAngle);
             this.barrel.rotation = angle;
         }
     }
 
-    initKeyboardHook() {
+    hookInput() {
         const cannon = this;
 
-        cc.eventManager.addListener({
-            event: cc.EventListener.KEYBOARD,
-            onKeyPressed(kCode, e) {
+        cc.eventManager.addListener({ // 2
+            event: cc.EventListener.KEYBOARD, // 3
+            onKeyPressed(kCode, e) { // 4
                 switch (kCode) {
                     case cc.KEY.a:
                         cannon.angleSpeed = -1 * cannon.baseAngleSpeed;
@@ -67,18 +61,16 @@ export default class Cannon extends cc.Component {
                         cannon.angleSpeed = cannon.baseAngleSpeed;
                         break;
                     case cc.KEY.space:
-                        // Get the position of the end of the barrel
-                        const barrelPosition = cannon.barrel.getPosition()
+                        const barrelPosition = cannon.barrel.getPosition() // 1
                         const angle = cannon.barrel.rotation
                         const barrelLength = cannon.barrel.height
-                        barrelPosition.x += barrelLength * sind(angle)
-                        barrelPosition.y += barrelLength * cosd(angle)
+                        barrelPosition.x += barrelLength * MathUtilities.sind(angle)
+                        barrelPosition.y += barrelLength * MathUtilities.cosd(angle)
 
-                        // Convert the position to world space of the cannon, then node space of the game canvas
-                        const barrelTipWorld = cannon.node.convertToWorldSpaceAR(barrelPosition)
-                        const bulletPosition = cannon.game.node.convertToNodeSpaceAR(barrelTipWorld)
+                        const barrelTipWorld = cannon.node.convertToWorldSpaceAR(barrelPosition) // 2
+                        const bulletPosition = cannon.game.node.convertToNodeSpaceAR(barrelTipWorld) // 3
 
-                        cannon.game.createBullet(bulletPosition, 400, angle)
+                        cannon.game.createBullet(bulletPosition, 400, angle) // 4
                 }
             },
             onKeyReleased(kCode, e) {
@@ -91,5 +83,4 @@ export default class Cannon extends cc.Component {
             }
         }, this.node);
     }
-    
 }

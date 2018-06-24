@@ -10,16 +10,10 @@
 
 const {ccclass, property} = cc._decorator;
 
-// Utiity
-const { cos, sin, PI } = Math;
-const rad = deg => deg * PI / 180;
-const cosd = deg => cos(rad(deg));
-const sind = deg => sin(rad(deg));
+import * as MathUtilities from './Utilities/MathUtilities'
 
 @ccclass
 export default class Game extends cc.Component {
-
-    @property gravity: number = 0;
 
     @property(cc.Prefab)
     bullet: cc.Prefab = null
@@ -27,11 +21,10 @@ export default class Game extends cc.Component {
     @property(cc.Prefab)
     meteor: cc.Prefab = null
 
-    @property(cc.Prefab)
-    explosion: cc.Prefab = null
+    @property (cc.RigidBody)
+    floor: cc.RigidBody = null // 1
 
-    @property(cc.AudioClip)
-    explosionSound: cc.AudioClip = null
+    @property gravity: number = 0
 
     @property meteorSpawnMinX = 0
     @property meteorSpawnMaxX = 0
@@ -40,13 +33,9 @@ export default class Game extends cc.Component {
     @property meteorMinVelocity = 0
     @property meteorMaxVelocity = 0
 
-    @property(cc.RigidBody)
-    floor: cc.RigidBody = null
-
-    // MARK: - Lifecycle
-    onLoad() {
-        // Create physics space
-        let physicsManager = cc.director.getPhysicsManager()
+    // LIFE-CYCLE CALLBACKS:
+    onLoad () {
+        let physicsManager = cc.director.getPhysicsManager() // 2
         physicsManager.enabled = true
         physicsManager.gravity = cc.v2(0, this.gravity)
     }
@@ -55,18 +44,17 @@ export default class Game extends cc.Component {
         this.scheduleCreateMeteor()
     }
 
-    // MARK: - Factory
+    // FACTORY
     createBullet(position: cc.Vec2, velocity: number, angle: number) {
-        const newBullet = cc.instantiate(this.bullet)
-        newBullet.setPosition(position) 
+        const newBullet = cc.instantiate(this.bullet) // 1
+        newBullet.setPosition(position) // 2
         newBullet.rotation = angle
 
-        // Physics, rigid body
-        // const body = newBullet.addComponent(cc.RigidBody)
-        const body = newBullet.getComponent(cc.RigidBody)
-        body.linearVelocity = cc.v2(sind(angle) * velocity, cosd(angle) * velocity)
-        
-        this.node.addChild(newBullet)
+        const body = newBullet.getComponent(cc.RigidBody) // 3
+        body.linearVelocity = cc.v2(MathUtilities.sind(angle) * velocity,
+                                    MathUtilities.cosd(angle) * velocity)
+
+        this.node.addChild(newBullet) // 4
     }
 
     createMeteor() {
@@ -80,25 +68,16 @@ export default class Game extends cc.Component {
         node.setPosition(cc.v2(x, y))
 
         const body = node.getComponent(cc.RigidBody)
-        body.linearVelocity = cc.v2(sind(angle) * velocity, cosd(angle) * velocity)
+        body.linearVelocity = cc.v2(MathUtilities.sind(angle) * velocity, MathUtilities.cosd(angle) * velocity)
         
         this.node.addChild(node)
     }
 
-    createExplosion(position: cc.Vec2) {
-        const node = cc.instantiate(this.explosion)
-        node.setPosition(position)
-        
-        this.node.addChild(node)
-
-        cc.audioEngine.playEffect(this.explosionSound, false)
-    }
-    
-    // MARK: - Utilities
     scheduleCreateMeteor() {
         cc.director.getScheduler().schedule(this.createMeteor, this, 1 + Math.random() * 1, false);
     }
 
+    // UTILITIES
     randInRange(min: number, max: number): number {
         return Math.random() * (max - min) + min;
     }
